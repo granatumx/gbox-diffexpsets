@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+import math
 from granatum_sdk import Granatum
 
 
@@ -34,7 +35,7 @@ def main():
     for coli in mean_df:
         for colj in mean_df:
             if coli != colj:
-                zscore_dfs.append(sqrt(len(inv_map[coli]))*(mean_df[coli]-mean_df[colj])/(std_df[coli]+std_df[colj])).fillna(0).clip(-20.0, 20.0))
+                zscore_dfs.append(math.sqrt(len(inv_map[coli]))*(mean_df[coli]-mean_df[colj])/(std_df[coli]+std_df[colj])).fillna(0).clip(-20.0, 20.0))
                 colnames.append("{} vs {}".format(coli, colj)) zscore_df = pd.concat(zscore_dfs, axis=1)
     zscore_df.columns = colnames
 
