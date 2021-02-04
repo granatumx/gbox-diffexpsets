@@ -23,12 +23,12 @@ def main():
 
     mean_dfs = []
     for k, v in inv_map.items():
-        mean_dfs.append(df.loc[:, v].mean(axis=1))
+        mean_dfs.append(assay.loc[:, v].mean(axis=1))
     mean_df = pd.concat(mean_dfs, axis=1)
 
     std_dfs = []
     for k, v in inv_map.items():
-        std_dfs.append(df.loc[:, v].std(axis=1))
+        std_dfs.append(assay.loc[:, v].std(axis=1))
     std_df = pd.concat(std_dfs, axis=1)
 
     zscore_dfs = []
