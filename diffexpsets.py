@@ -18,16 +18,16 @@ def main():
     numrows = gn.get_arg('numrows')
 
     inv_map = {}
-    for k, v in groups.iteritems():
+    for k, v in groups.items():
         inv_map[v] = inv_map.setdefault(v, []).append(k)
 
     mean_dfs = []
-    for k, v in inv_map.iteritems():
+    for k, v in inv_map.items():
         mean_dfs.append(df.loc[:, v].mean(axis=1))
     mean_df = pd.concat(mean_dfs, axis=1)
 
     std_dfs = []
-    for k, v in inv_map.iteritems():
+    for k, v in inv_map.items():
         std_dfs.append(df.loc[:, v].std(axis=1))
     std_df = pd.concat(std_dfs, axis=1)
 
