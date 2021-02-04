@@ -19,7 +19,9 @@ def main():
 
     inv_map = {}
     for k, v in groups.items():
-        inv_map[v] = inv_map.setdefault(v, []).append(k)
+        if(!(v in inv_map)): 
+            inv_map[v] = []
+        inv_map[v] = inv_map[v].append(k)
 
     mean_dfs = []
     for k, v in inv_map.items():
