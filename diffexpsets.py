@@ -25,22 +25,29 @@ def main():
 
     mean_dfs = []
     std_dfs = []
+    colnames = []
     for k, v in inv_map.items():
         mean_dfs.append(assay.loc[:, v].mean(axis=1))
         std_dfs.append(assay.loc[:, v].std(axis=1))
-
+        colnames.append(k)
     mean_df = pd.concat(mean_dfs, axis=1)
+    mean_df.columns = colnames
     std_df = pd.concat(std_dfs, axis=1)
+    std_df.columns = colnames
 
     mean_rest_dfs = []
     std_rest_dfs = []
+    colnames = []
     for k, v in inv_map.items():
         rest_v = list(set(list(assay.columns)).difference(set(v)))
         print(rest_v)
         mean_rest_dfs.append(assay.loc[:, rest_v].mean(axis=1))
         std_rest_dfs.append(assay.loc[:, rest_v].std(axis=1))
+        colnames.append(k)
     mean_rest_df = pd.concat(mean_rest_dfs, axis=1)
+    mean_rest_df.columns = colnames
     std_rest_df = pd.concat(std_rest_dfs, axis=1)
+    std_rest_df.columns = colnames
 
     zscore_dfs = []
     colnames = []
