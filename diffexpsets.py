@@ -19,7 +19,7 @@ def main():
 
     inv_map = {}
     for k, v in groups.items():
-        inv_map[v] = inv_map.get(v, []).append(k)
+        inv_map[v] = inv_map.get(v, []) + [k]
 
     mean_dfs = []
     for k, v in inv_map.items():
