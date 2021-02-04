@@ -16,7 +16,8 @@ def main():
     assay = gn.pandas_from_assay(gn.get_import('assay'))
     groups = gn.get_import('groups')
 
-    numrows = gn.get_arg('numrows')
+    min_zscore = gn.get_arg('min_zscore')
+    max_zscore = gn.get_arg('max_zscore')
 
     inv_map = {}
     for k, v in groups.items():
@@ -35,12 +36,14 @@ def main():
     for coli in mean_df:
         for colj in mean_df:
             if coli != colj:
-                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/((2.0*std_df[coli]+std_df[colj])/3.0)).fillna(0).clip(-20.0, 20.0))
+                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj]+1.0)).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
     zscore_df = pd.concat(zscore_dfs, axis=1)
     zscore_df.columns = colnames
+    norms_df = zscore_df.apply(np.linalg.norm, axis=1)
+    colsmatching = norms_df.T[(norms_df.T >= min_zscore)].index.values
 
-    gn.export_statically(gn.assay_from_pandas(zscore_df.T), 'Differential expression sets')
+    gn.export_statically(gn.assay_from_pandas(zscore_df.T[colsmatching]), 'Differential expression sets')
 
     toc = time.perf_counter()
     time_passed = round(toc - tic, 2)

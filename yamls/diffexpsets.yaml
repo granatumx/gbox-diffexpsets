@@ -13,12 +13,18 @@ endpoints:
     image: {GBOX}
 frontend:
   args:
-    - max: 100
-      min: 10
+    - min: 0.0
+      step: 0.1
       type: number
-      label: Number of rows to show
-      default: 10
-      injectInto: numrows
+      label: Min zscore (for filtering genes that are not differentially expressing anywhere)
+      default: 1.0
+      injectInto: min_zscore
+    - min: 0.0
+      step: 0.1
+      type: number
+      label: Max zscore (for limiting genes that start to express when the comparison group has no expression)
+      default: 20.0
+      injectInto: max_zscore
   imports:
     - kind: assay
       label: Assay including matrix and geneIds
