@@ -36,7 +36,8 @@ def main():
         for colj in mean_df:
             if coli != colj:
                 zscore_dfs.append((math.sqrt(len(inv_map[coli]))*(mean_df[coli]-mean_df[colj])/(std_df[coli]+std_df[colj])).fillna(0).clip(-20.0, 20.0))
-                colnames.append("{} vs {}".format(coli, colj)) zscore_df = pd.concat(zscore_dfs, axis=1)
+                colnames.append("{} vs {}".format(coli, colj)) 
+    zscore_df = pd.concat(zscore_dfs, axis=1)
     zscore_df.columns = colnames
 
     gn.export_statically(gn.assay_from_pandas(zscore_df.T), 'Differential expression sets')
