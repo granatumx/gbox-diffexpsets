@@ -42,8 +42,9 @@ def main():
     zscore_df.columns = colnames
     norms_df = zscore_df.apply(np.linalg.norm, axis=1)
     colsmatching = norms_df.T[(norms_df.T >= min_zscore)].index.values
-
-    gn.export_statically(gn.assay_from_pandas(zscore_df.T[colsmatching]), 'Differential expression sets')
+    return_df = zscore_df.T[colsmatching]
+    gn.export_statically(gn.assay_from_pandas(return_df), 'Differential expression sets')
+    gn.export(return_df.to_csv(), 'differential_gene_sets.csv', kind='raw', meta=None, raw=True)
 
     toc = time.perf_counter()
     time_passed = round(toc - tic, 2)
