@@ -22,13 +22,11 @@ def main():
         inv_map[v] = inv_map.get(v, []) + [k]
 
     mean_dfs = []
-    for k, v in inv_map.items():
-        mean_dfs.append(assay.loc[:, v].mean(axis=1))
-    mean_df = pd.concat(mean_dfs, axis=1)
-
     std_dfs = []
     for k, v in inv_map.items():
+        mean_dfs.append(assay.loc[:, v].mean(axis=1))
         std_dfs.append(assay.loc[:, v].std(axis=1))
+    mean_df = pd.concat(mean_dfs, axis=1)
     std_df = pd.concat(std_dfs, axis=1)
 
     zscore_dfs = []
@@ -36,7 +34,7 @@ def main():
     for coli in mean_df:
         for colj in mean_df:
             if coli != colj:
-                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/std_df[colj]).fillna(0).clip(-10.0, 10.0))
+                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[coli]+std_df[colj])).fillna(0).clip(-20.0, 20.0))
                 colnames.append("{} vs {}".format(coli, colj))
     zscore_df = pd.concat(zscore_dfs, axis=1)
     zscore_df.columns = colnames
