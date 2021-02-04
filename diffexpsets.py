@@ -35,7 +35,7 @@ def main():
     for coli in mean_df:
         for colj in mean_df:
             if coli != colj:
-                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[coli]+1.0)).fillna(0).clip(-20.0, 20.0))
+                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/((2.0*std_df[coli]+std_df[colj])/3.0)).fillna(0).clip(-20.0, 20.0))
                 colnames.append("{} vs {}".format(coli, colj)) 
     zscore_df = pd.concat(zscore_dfs, axis=1)
     zscore_df.columns = colnames
