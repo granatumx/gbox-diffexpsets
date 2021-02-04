@@ -35,7 +35,7 @@ def main():
     mean_rest_dfs = []
     std_rest_dfs = []
     for k, v in inv_map.items():
-        rest_v = list(set(assay.index.values()).difference(set(v)))
+        rest_v = list(set(assay.index.values).difference(set(v)))
         mean_rest_dfs.append(assay.loc[:, rest_v].mean(axis=1))
         std_rest_dfs.append(assay.loc[:, rest_v].std(axis=1))
     mean_rest_df = pd.concat(mean_rest_dfs, axis=1)
