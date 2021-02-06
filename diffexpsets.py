@@ -42,8 +42,8 @@ def main():
             meanbounds = sms.DescrStatsW(row).tconfint_mean()
             lowbound_clust[index] = meanbounds[0]
             highbound_clust[index] = meanbounds[1]
-        low_mean_dfs = pd.DataFrame.from_dict(lowbound_clust, orient="index", columns=[k])
-        high_mean_dfs = pd.DataFrame.from_dict(highbound_clust, orient="index", columns=[k])
+        low_mean_dfs.append(pd.DataFrame.from_dict(lowbound_clust, orient="index", columns=[k]))
+        high_mean_dfs.append(pd.DataFrame.from_dict(highbound_clust, orient="index", columns=[k]))
         # mean_dfs.append(assay.loc[:, v].mean(axis=1))
         std_dfs.append(group_values.std(axis=1))
         colnames.append(k)
