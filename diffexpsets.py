@@ -61,7 +61,6 @@ def main():
     colnames = []
     for k, v in inv_map.items():
         rest_v = list(set(list(assay.columns)).difference(set(v)))
-        print(rest_v)
         mean_rest_dfs.append(assay.loc[:, rest_v].mean(axis=1))
         std_rest_dfs.append(assay.loc[:, rest_v].std(axis=1))
         colnames.append(k)
@@ -83,7 +82,7 @@ def main():
 
                 zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
-    for coli in mean_df:
+    for coli in colnames:
         zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
         colnames.append("{} vs rest".format(coli)) 
 
