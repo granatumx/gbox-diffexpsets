@@ -45,7 +45,7 @@ def main():
             highbound_clust[index] = meanbounds[1]
         low_mean_dfs.append(pd.DataFrame.from_dict(lowbound_clust, orient="index", columns=[k]))
         high_mean_dfs.append(pd.DataFrame.from_dict(highbound_clust, orient="index", columns=[k]))
-        mean_dfs.append(assay.loc[:, v].mean(axis=1))
+        mean_dfs.append(group_values.mean(axis=1))
         std_dfs.append(group_values.std(axis=1))
         colnames.append(k)
     mean_df = pd.concat(mean_dfs, axis=1)
@@ -80,9 +80,9 @@ def main():
                 # Fetch most realistic mean comparison set, what is smallest difference between two ranges
                 mean_diff_overlap_low_high = (low_mean_df[coli]-high_mean_df[colj])
                 mean_diff_overlap_high_low = (high_mean_df[coli]-low_mean_df[colj])
-                mean_df = mean_diff_overlap_low_high.combine(mean_diff_overlap_high_low, range_check).to_frame()
+                diff_df = mean_diff_overlap_low_high.combine(mean_diff_overlap_high_low, range_check).to_frame()
 
-                zscore_dfs.append((mean_df/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
+                zscore_dfs.append((diff_df/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
     for coli in cols:
         zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
