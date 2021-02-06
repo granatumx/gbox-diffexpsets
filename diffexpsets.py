@@ -80,7 +80,8 @@ def main():
                 mean_diff_overlap_low_high = (low_mean_df[coli]-high_mean_df[colj])
                 mean_diff_overlap_high_low = (high_mean_df[coli]-low_mean_df[colj])
                 mean_df = mean_diff_overlap_low_high.combine(mean_diff_overlap_high_low, range_check)
-                print("Combined {} {}".format(coli, colj), flush=True)
+                print("Combined {} with {}".format(coli, colj), flush=True)
+                print(type(mean_df), flush=True)
                 mean_df.columns = cols
                 print(mean_df, flush=True)
 
