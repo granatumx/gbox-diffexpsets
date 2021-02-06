@@ -62,7 +62,6 @@ def main():
     minvalues.columns=["min"]
     print("Minvalues>>")
     print(minvalues, flush=True)
-    time.sleep(10)
     genes_below_min = list((minvalues[minvalues["min"]<min_expression_variation]).index)
     print("{} out of {}".format(len(genes_below_min), len(minvalues.index)), flush=True)
     mean_df = mean_df.drop(genes_below_min, axis=0)
@@ -71,7 +70,6 @@ def main():
     std_df = std_df.drop(genes_below_min, axis=0)
     assay = assay.drop(genes_below_min, axis=0)
     print("Filtered assay to get {} columns by {} rows".format(len(assay.columns), len(assay.index)), flush=True)
-    time.sleep(10)
 
     mean_rest_dfs = []
     std_rest_dfs = []
