@@ -64,7 +64,7 @@ def main():
     print(minvalues, flush=True)
     time.sleep(10)
     genes_below_min = list((minvalues[minvalues["min"]<min_expression_variation]).index)
-    print(genes_below_min, flush=True)
+    print("{} out of {}".format(len(genes_below_min), len(minvalues.index)), flush=True)
     mean_df = mean_df.drop(genes_below_min, axis=0)
     low_mean_df = low_mean_df.drop(genes_below_min, axis=0)
     high_mean_df = high_mean_df.drop(genes_below_min, axis=0)
