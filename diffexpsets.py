@@ -5,8 +5,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 import math
+import statsmodels.stats.api as sms
 from granatum_sdk import Granatum
 
+def range_check(x, y):
+    if(x <= 0.0 and y <= 0.0):
+        return max(x, y)
+    if (x >= 0.0 and y >= 0.0):
+        return min(x, y)
+    return 0.0
 
 def main():
     tic = time.perf_counter()
@@ -23,15 +30,29 @@ def main():
     for k, v in groups.items():
         inv_map[v] = inv_map.get(v, []) + [k]
 
-    mean_dfs = []
+    low_mean_dfs = []
+    high_mean_dfs = []
     std_dfs = []
     colnames = []
     for k, v in inv_map.items():
-        mean_dfs.append(assay.loc[:, v].mean(axis=1))
-        std_dfs.append(assay.loc[:, v].std(axis=1))
+        group_values = assay.loc[:, v]
+        lowbound_clust = {}
+        highbound_clust = {}
+        for index, row in group_values.iterrows():
+            meanbounds = sms.DescrStatsW(row).tconfint_mean()
+            lowbound_clust[index] = meanbounds[0]
+            highbound_clust[index] = meanbounds[1]
+        low_mean_dfs = pd.DataFrame.from_dict(lowbound_clust, orient="index", columns=[k])
+        high_mean_dfs = pd.DataFrame.from_dict(highbound_clust, orient="index", columns=[k])
+        # mean_dfs.append(assay.loc[:, v].mean(axis=1))
+        std_dfs.append(group_values.std(axis=1))
         colnames.append(k)
-    mean_df = pd.concat(mean_dfs, axis=1)
-    mean_df.columns = colnames
+    #mean_df = pd.concat(mean_dfs, axis=1)
+    #mean_df.columns = colnames
+    low_mean_df = pd.concat(low_mean_dfs, axis=1)
+    low_mean_df.columns = colnames
+    high_mean_df = pd.concat(high_mean_dfs, axis=1)
+    high_mean_df.columns = colnames
     std_df = pd.concat(std_dfs, axis=1)
     std_df.columns = colnames
 
@@ -54,10 +75,16 @@ def main():
     for coli in mean_df:
         for colj in mean_df:
             if coli != colj:
-                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj]+1.0/max_zscore)).fillna(0).clip(-max_zscore, max_zscore))
+                # Here we should check significance
+                # Fetch most realistic mean comparison set, what is smallest difference between two ranges
+                mean_diff_overlap_low_high = (low_mean_df[coli]-high_mean_df[colj])
+                mean_diff_overlap_high_low = (high_mean_df[coli]-low_mean_df[colj])
+                mean_df = mean_diff_overlap_low_high.combine(mean_diff_overlap_high_low, range_check)
+
+                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
     for coli in mean_df:
-        zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj]+1.0/max_zscore)).fillna(0).clip(-max_zscore, max_zscore))
+        zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
         colnames.append("{} vs rest".format(coli)) 
 
     zscore_df = pd.concat(zscore_dfs, axis=1)
