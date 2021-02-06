@@ -57,6 +57,7 @@ def main():
     high_mean_df.columns = colnames
     std_df = pd.concat(std_dfs, axis=1)
     std_df.columns = colnames
+    print(std_df)
     minvalues = std_df.min(axis=1).to_frame().T
     print(minvalues, flush=True)
     genes_below_min = list(minvalues[minvalues<min_expression_variation].columns)
