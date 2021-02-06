@@ -32,6 +32,7 @@ def main():
 
     low_mean_dfs = []
     high_mean_dfs = []
+    mean_dfs = []
     std_dfs = []
     colnames = []
     for k, v in inv_map.items():
@@ -44,11 +45,11 @@ def main():
             highbound_clust[index] = meanbounds[1]
         low_mean_dfs.append(pd.DataFrame.from_dict(lowbound_clust, orient="index", columns=[k]))
         high_mean_dfs.append(pd.DataFrame.from_dict(highbound_clust, orient="index", columns=[k]))
-        # mean_dfs.append(assay.loc[:, v].mean(axis=1))
+        mean_dfs.append(assay.loc[:, v].mean(axis=1))
         std_dfs.append(group_values.std(axis=1))
         colnames.append(k)
-    #mean_df = pd.concat(mean_dfs, axis=1)
-    #mean_df.columns = colnames
+    mean_df = pd.concat(mean_dfs, axis=1)
+    mean_df.columns = colnames
     low_mean_df = pd.concat(low_mean_dfs, axis=1)
     low_mean_df.columns = colnames
     high_mean_df = pd.concat(high_mean_dfs, axis=1)
