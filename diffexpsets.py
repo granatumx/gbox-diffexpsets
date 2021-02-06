@@ -81,7 +81,7 @@ def main():
                 mean_diff_overlap_high_low = (high_mean_df[coli]-low_mean_df[colj])
                 mean_df = mean_diff_overlap_low_high.combine(mean_diff_overlap_high_low, range_check).to_frame()
 
-                zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
+                zscore_dfs.append((mean_df/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
     for coli in cols:
         zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
