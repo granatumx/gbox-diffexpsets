@@ -70,9 +70,10 @@ def main():
     std_rest_df.columns = colnames
 
     zscore_dfs = []
+    cols = colnames
     colnames = []
-    for coli in colnames:
-        for colj in colnames:
+    for coli in cols:
+        for colj in cols:
             if coli != colj:
                 # Here we should check significance
                 # Fetch most realistic mean comparison set, what is smallest difference between two ranges
@@ -82,7 +83,7 @@ def main():
 
                 zscore_dfs.append(((mean_df[coli]-mean_df[colj])/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
-    for coli in colnames:
+    for coli in cols:
         zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
         colnames.append("{} vs rest".format(coli)) 
 
