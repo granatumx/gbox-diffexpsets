@@ -72,8 +72,8 @@ def main():
 
     zscore_dfs = []
     colnames = []
-    for coli in mean_df:
-        for colj in mean_df:
+    for coli in colnames:
+        for colj in colnames:
             if coli != colj:
                 # Here we should check significance
                 # Fetch most realistic mean comparison set, what is smallest difference between two ranges
