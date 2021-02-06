@@ -59,10 +59,11 @@ def main():
     std_df.columns = colnames
     print(std_df)
     minvalues = std_df.min(axis=1).to_frame()
+    minvalues.columns=["min"]
     print("Minvalues>>")
     print(minvalues, flush=True)
     time.sleep(10)
-    genes_below_min = list(minvalues[minvalues<min_expression_variation].index)
+    genes_below_min = list((minvalues[minvalues["min"]<min_expression_variation]).index)
     print(genes_below_min, flush=True)
     mean_df = mean_df.drop(genes_below_min, axis=0)
     low_mean_df = low_mean_df.drop(genes_below_min, axis=0)
