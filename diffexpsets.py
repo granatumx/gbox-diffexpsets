@@ -68,6 +68,7 @@ def main():
     std_df = std_df.drop(genes_below_min, axis=0)
     assay = assay.drop(genes_below_min, axis=0)
     print("Filtered assay to get {} columns by {} rows".format(len(assay.columns), len(assay.index)), flush=True)
+    time.sleep(10)
 
     mean_rest_dfs = []
     std_rest_dfs = []
