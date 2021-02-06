@@ -58,11 +58,11 @@ def main():
     std_df = pd.concat(std_dfs, axis=1)
     std_df.columns = colnames
     print(std_df)
-    minvalues = std_df.min(axis=1).to_frame().T
+    minvalues = std_df.min(axis=1).to_frame()
     print("Minvalues>>")
     print(minvalues, flush=True)
     time.sleep(10)
-    genes_below_min = list(minvalues[minvalues<min_expression_variation].columns)
+    genes_below_min = list(minvalues[minvalues<min_expression_variation].index)
     print(genes_below_min, flush=True)
     mean_df = mean_df.drop(genes_below_min, axis=0)
     low_mean_df = low_mean_df.drop(genes_below_min, axis=0)
