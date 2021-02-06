@@ -25,6 +25,12 @@ frontend:
       label: Max zscore (for limiting genes that start to express when the comparison group has no expression)
       default: 20.0
       injectInto: max_zscore
+    - min: 0.0
+      step: 0.01
+      type: number
+      label: Filter genes below minimum expression level variation in all clusters to form a statistic
+      default: 0.1
+      injectInto: min_expression_variation
   imports:
     - kind: assay
       label: Assay including matrix and geneIds

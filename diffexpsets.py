@@ -25,6 +25,7 @@ def main():
 
     min_zscore = gn.get_arg('min_zscore')
     max_zscore = gn.get_arg('max_zscore')
+    min_expression_variation = gn.get_arg('min_expression_variation')
 
     inv_map = {}
     for k, v in groups.items():
@@ -56,6 +57,14 @@ def main():
     high_mean_df.columns = colnames
     std_df = pd.concat(std_dfs, axis=1)
     std_df.columns = colnames
+    minvalues = std_df.min(axis=0).to_frame().T
+    genes_below_min = list(minvalues[minvalues<min_expression_variation].columns)
+    mean_df = mean_df.drop(genes_below_min, axis=0)
+    low_mean_df = low_mean_df.drop(genes_below_min, axis=0)
+    high_mean_df = high_mean_df.drop(genes_below_min, axis=0)
+    std_df = std_df.drop(genes_below_min, axis=0)
+    assay = assay.drop(genes_below_min, axis=0)
+    print("Filtered assay to get {} columns by {} rows".format(len(assay.columns), len(assay.index)), flush=True)
 
     mean_rest_dfs = []
     std_rest_dfs = []
