@@ -99,7 +99,7 @@ def main():
                 zscore_dfs.append((diff_df/(std_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
                 colnames.append("{} vs {}".format(coli, colj)) 
     for coli in cols:
-        zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj])).fillna(0).clip(-max_zscore, max_zscore))
+        zscore_dfs.append(((mean_df[coli]-mean_rest_df[colj])/(std_rest_df[colj]+std_rest_df[coli])).fillna(0).clip(-max_zscore, max_zscore))
         colnames.append("{} vs rest".format(coli)) 
 
     zscore_df = pd.concat(zscore_dfs, axis=1)
